@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"github.com/urfave/cli/v2"
+	//"encoding/hex"
 )
 
 func App() *cli.App {
@@ -62,7 +63,7 @@ func shasum(data *[]byte, algorithm string) (interface{}, error) {
 
 func main() {
 	app := &cli.App{
-		Version: "0.1.0",
+		Version: "0.1.1",
 		Name: "shasumgo",
 		Usage: "$ shasumgo go.mod go.sum",
 		Action: func(c *cli.Context) error {
@@ -115,6 +116,46 @@ func main() {
 				}
 				if  suma != sumb {
 					fmt.Printf("%x %x", suma, sumb)
+				}
+				return nil
+			},
+		},
+		{
+			Name:    "s",
+			Aliases: []string{"s"},
+			Usage:   "shasumgo s xxxxxxxx ./go.mod",
+			Subcommands: []*cli.Command{
+				{
+					Name:  "c",
+					Aliases: []string{"c"},
+					Usage: "xq s c xxxxxx ./go.mod",
+					Action: func(c *cli.Context) error {
+						h := c.Args().Get(0)
+						filea, _ := ioutil.ReadFile(c.Args().Get(1))
+						suma, err := shasum(&filea, *algorithm)
+						if err != nil {
+							fmt.Println(err)
+						}
+						s := fmt.Sprintf("%x", suma)
+						if h != s {
+							fmt.Printf("%s %s", h, s)
+						}
+						return nil
+					},
+				},
+			},
+			Action:  func(c *cli.Context) error {
+				h := c.Args().Get(0)
+				filea, _ := ioutil.ReadFile(c.Args().Get(1))
+				suma, err := shasum(&filea, *algorithm)
+				if err != nil {
+					fmt.Println(err)
+				}
+				s := fmt.Sprintf("%x", suma)
+				if h != s {
+					fmt.Printf("%s %s", h, s)
+				} else {
+					fmt.Printf("ok")
 				}
 				return nil
 			},
