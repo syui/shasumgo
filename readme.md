@@ -1,4 +1,15 @@
-`checksum` go
+## shasumgo
+
+`checksum` golang.
+
+### install
+
+```sh
+$ go get github.com/syui/shasumgo
+$ which shasumgo
+```
+
+### use
 
 ```sh
 $ shasumgo ~/.bashrc ~/.bashrc
